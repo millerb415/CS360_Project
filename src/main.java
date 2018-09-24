@@ -15,7 +15,7 @@ public class main {
 		try {
 			 // FileReader reads text files in the default encoding.
             FileReader fileReader = 
-                new FileReader("readMeIn.txt");
+                new FileReader("APU_CS370_input.txt");
 
             // Always wrap FileReader in BufferedReader.
             BufferedReader bufferedReader = 
