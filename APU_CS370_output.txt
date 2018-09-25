@@ -1,3 +1,6 @@
+Group Name(3) – Members(Micah Edington, Ryan Alcantra, Brandon Miller)
+    Lexeme          Token
+    ------          -----
   Function        Keyword
        Add     Identifier
          (      Separator
@@ -40,7 +43,7 @@
          B     Identifier
          )      Separator
          ;      Separator
-     Print     Identifier
+     Print        Keyword
          (      Separator
        Ret     Identifier
          )      Separator

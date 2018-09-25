@@ -24,6 +24,9 @@ public class main
             fw = new FileWriter("APU_CS370_output.txt");
             br = new BufferedReader(fr);
             pw = new PrintWriter(fw, true);
+            pw.print("Group Name(3) – Members(Micah Edington, Ryan Alcantra,Brandon Miller)\n");
+            pw.printf("%10s%15s\n", "Lexeme", "Token");
+            pw.println("    ------          -----");
             while(( line = br.readLine() ) != null ) 
             {
                 lex(line, pw );
@@ -48,8 +51,7 @@ public class main
 	private static void lex(String line, PrintWriter pw) throws IOException 
 	{
 		String word = "";
-		char[] cArray = line.toCharArray();
-        for (char c : cArray) 
+        for (char c : line.toCharArray()) 
         {
           switch (c) 
           {
@@ -86,7 +88,8 @@ public class main
 		}
         checkword(word, pw); 
 		}
-    ///////////////////////////////////////////////////////////
+   
+	///////////////////////////////////////////////////////////
 	//
 	//
 	//
@@ -98,6 +101,7 @@ public class main
 		case "Float":
 		case "Function": 
 		case "If":
+		case "Print":
 		case "Else":
 		case "Return":
 		case "Write": 
