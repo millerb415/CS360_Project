@@ -8,28 +8,28 @@
          ;      Separator
          G     Identifier
          =       Operator
-       123     Identifier
+       123        Integer
          ;      Separator
          A     Identifier
          =       Operator
-    125.50     Identifier
+    125.50          float
          ;      Separator
         If        Keyword
          (      Separator
          G     Identifier
          <       Operator
-         6     Identifier
+         6        Integer
          )      Separator
          {      Separator
          B     Identifier
          =       Operator
-     23.00     Identifier
+     23.00          float
          ;      Separator
          }      Separator
          {      Separator
          B     Identifier
          =       Operator
-     11.00     Identifier
+     11.00          float
          ;      Separator
          }      Separator
      Write        Keyword

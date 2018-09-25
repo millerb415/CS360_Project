@@ -3,24 +3,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Scanner;
+
 
 public class main {
-	private static final String[] keywords = new String[] {	
-			"Integer", "Float", "Function", 
-			"If", "Else", "Return", "Write", 
-			"DOWhile"
-															};
-	private static final String[] Operators = new String[] {	
-			"+", "-", "*", 
-			"/", "<=", ">=", "=",  
-			"++"
-			};
-	private static final String[] Separators = new String[] {	
-			"{", "}", "(", 
-			")", ",", ";"
-			};
-	
+
+
 	public static void main(String[] args) {
 		BufferedReader br;
 		FileReader fr;
@@ -28,13 +15,10 @@ public class main {
 		String line;
 		FileWriter fw;
 		try {
-			 // FileReader reads text files in the default encoding.
             fr = new FileReader("APU_CS370_input.txt");
             fw = new FileWriter("APU_CS370_output.txt");
-            // Always wrap FileReader in BufferedReader.
             br = new BufferedReader(fr);
             pw = new PrintWriter(fw, true);
-            //pw.println("hi");
             while(( line = br.readLine() ) != null ) {
                 lex(line, pw );
             }   
@@ -50,7 +34,6 @@ public class main {
 	}
 
 	private static void lex(String line, PrintWriter pw) throws IOException {
-		Scanner scan = new Scanner(line);
 		String word = "";
 		//pw.print(scan.next());
 		char[] cArray = line.toCharArray();
@@ -85,42 +68,10 @@ public class main {
         	 word += c;
           }	  
 		}
-		
-//		while (() != null ) 
-//		{
-//			;
-//			pw.print(word + "    ");
-//			for (String Op : Operators) {
-//				if (Op == word)
-//				{
-//					pw.println("Operand");
-//				break;
-//				}	
-//			}
-//			
-//			}
-//			for (String Op : Operators) {
-//				if (Op == word)
-//				{
-//					pw.println("Operand");
-//				break;
-//				}	
-//			}
-//			for (String Op : Operators) {
-//				if (Op == word)
-//				{
-//					pw.println("Operand");
-//				break;
-//				}	
-//			}
-//		
-//		}
-//		
           
 		}
 
 	private static void checkword(String word, PrintWriter pw) {
-		// TODO Auto-generated method stub
 		
 		switch (word) {
 		case "Integer":
@@ -134,11 +85,23 @@ public class main {
 			pw.printf("%10s%15s\n", word, "Keyword");
 			break;
 		case "":
-			break;
 		case " ":
 			break;			
 		default:
+			if (word.charAt(0)>= '0' && word.charAt(0) <= '9')
+			{
+				for (char c : word.toCharArray()) {
+					if(c == '.') {
+						pw.printf("%10s%15s\n", word, "float");
+						return;
+					}
+					
+				}
+				pw.printf("%10s%15s\n", word, "Integer");
+				return;
+			}
 			pw.printf("%10s%15s\n", word,"Identifier");
+			return;
 		}
 	}
 
