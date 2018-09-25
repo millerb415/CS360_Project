@@ -1,4 +1,4 @@
-Group Name(3) – Members(Micah Edington, Ryan Alcantra, Brandon Miller)
+Group Name(3) – Members(Micah Edington, Ryan Alcantra,Brandon Miller)
     Lexeme          Token
     ------          -----
   Function        Keyword

@@ -24,7 +24,7 @@ public class main
             fw = new FileWriter("APU_CS370_output.txt");
             br = new BufferedReader(fr);
             pw = new PrintWriter(fw, true);
-            pw.print("Group Name(3) – Members(Micah Edington, Ryan Alcantra,Brandon Miller)\n");
+            pw.print("Group Name(3) – Members(Micah Edington, Ryan Alcantra, Brandon Miller)\n");
             pw.printf("%10s%15s\n", "Lexeme", "Token");
             pw.println("    ------          -----");
             while(( line = br.readLine() ) != null ) 
