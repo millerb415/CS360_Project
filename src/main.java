@@ -67,8 +67,8 @@ public class main {
          case '>':
          case '<':
          case '=':
-        	 pw.printf("%10c      Operator\n", c);
         	 checkword(word, pw);
+        	 pw.printf("%10c%15s\n", c, "Operator");
         	 word = "";
         	 break;
          case '(': 	 
@@ -77,8 +77,8 @@ public class main {
          case '}':
          case ';':
          case ',':
-        	 pw.printf("%10c      Separator\n", c);
         	 checkword(word, pw);
+        	 pw.printf("%10c%15s\n", c, "Separator");
         	 word = "";
         	 break;
          default: 
@@ -121,6 +121,7 @@ public class main {
 
 	private static void checkword(String word, PrintWriter pw) {
 		// TODO Auto-generated method stub
+		
 		switch (word) {
 		case "Integer":
 		case "Float":
@@ -130,14 +131,14 @@ public class main {
 		case "Return":
 		case "Write": 
 		case "DOWhile":
-			pw.printf("%10s       Keyword\n", word);
+			pw.printf("%10s%15s\n", word, "Keyword");
 			break;
 		case "":
 			break;
 		case " ":
 			break;			
 		default:
-			pw.printf("%10s       Identifier\n", word);
+			pw.printf("%10s%15s\n", word,"Identifier");
 		}
 	}
 

@@ -1,39 +1,39 @@
-   Integer      Keyword
+   Integer        Keyword
+         G     Identifier
          ;      Separator
-         G      Identifier
-     Float      Keyword
+     Float        Keyword
+         A     Identifier
          ,      Separator
-         A      Identifier
+         B     Identifier
          ;      Separator
-         B      Identifier
-         =      Operator
-         G      Identifier
+         G     Identifier
+         =       Operator
+       123     Identifier
          ;      Separator
-       123      Identifier
-         =      Operator
-         A      Identifier
+         A     Identifier
+         =       Operator
+    125.50     Identifier
          ;      Separator
-    125.50      Identifier
-        If      Keyword
+        If        Keyword
          (      Separator
-         G      Identifier
-         <      Operator
+         G     Identifier
+         <       Operator
+         6     Identifier
          )      Separator
-         6      Identifier
          {      Separator
-         =      Operator
-         B      Identifier
+         B     Identifier
+         =       Operator
+     23.00     Identifier
          ;      Separator
-     23.00      Identifier
          }      Separator
          {      Separator
-         =      Operator
-         B      Identifier
+         B     Identifier
+         =       Operator
+     11.00     Identifier
          ;      Separator
-     11.00      Identifier
          }      Separator
+     Write        Keyword
          (      Separator
-     Write      Keyword
+         B     Identifier
          )      Separator
-         B      Identifier
          ;      Separator
