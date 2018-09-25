@@ -1,13 +1,10 @@
-Integer G;
-Float A,B;
-G=123;
-A=125.50;
-If (G < 6)
+Function Add (Integer A,
+Integer B)
 {
-B=23.00;
+Return (A+B);
 }
-Else
-{
-B=11.00;
-}
-Write(B);
+Integer A,Integer B;
+A=5;
+B=5;
+Integer Ret=Add(A,B);
+Print (Ret);

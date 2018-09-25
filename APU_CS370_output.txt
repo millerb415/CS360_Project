@@ -1,39 +1,47 @@
+  Function        Keyword
+       Add     Identifier
+         (      Separator
    Integer        Keyword
-         G     Identifier
+         A     Identifier
+         ,      Separator
+   Integer        Keyword
+         B     Identifier
+         )      Separator
+         {      Separator
+    Return        Keyword
+         (      Separator
+         A     Identifier
+         +       Operator
+         B     Identifier
+         )      Separator
          ;      Separator
-     Float        Keyword
+         }      Separator
+   Integer        Keyword
+         A     Identifier
+         ,      Separator
+   Integer        Keyword
+         B     Identifier
+         ;      Separator
+         A     Identifier
+         =       Operator
+         5        Integer
+         ;      Separator
+         B     Identifier
+         =       Operator
+         5        Integer
+         ;      Separator
+   Integer        Keyword
+       Ret     Identifier
+         =       Operator
+       Add     Identifier
+         (      Separator
          A     Identifier
          ,      Separator
          B     Identifier
-         ;      Separator
-         G     Identifier
-         =       Operator
-       123        Integer
-         ;      Separator
-         A     Identifier
-         =       Operator
-    125.50          float
-         ;      Separator
-        If        Keyword
-         (      Separator
-         G     Identifier
-         <       Operator
-         6        Integer
          )      Separator
-         {      Separator
-         B     Identifier
-         =       Operator
-     23.00          float
          ;      Separator
-         }      Separator
-         {      Separator
-         B     Identifier
-         =       Operator
-     11.00          float
-         ;      Separator
-         }      Separator
-     Write        Keyword
+     Print     Identifier
          (      Separator
-         B     Identifier
+       Ret     Identifier
          )      Separator
          ;      Separator

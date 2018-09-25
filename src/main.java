@@ -5,75 +5,95 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 
-public class main {
-
-
-	public static void main(String[] args) {
+public class main 
+{
+    ////////////////////////////////////////////////////
+	//
+	//
+	//
+	public static void main(String[] args) 
+	{
 		BufferedReader br;
 		FileReader fr;
 		PrintWriter pw;
 		String line;
 		FileWriter fw;
-		try {
+		try 
+		{
             fr = new FileReader("APU_CS370_input.txt");
             fw = new FileWriter("APU_CS370_output.txt");
             br = new BufferedReader(fr);
             pw = new PrintWriter(fw, true);
-            while(( line = br.readLine() ) != null ) {
+            while(( line = br.readLine() ) != null ) 
+            {
                 lex(line, pw );
             }   
-
             // Always close files.
             br.close();
+            pw.close();
             System.out.println("Done!");
-		}catch (Exception e) {
+		}
+		catch (Exception e) 
+		{
 		
 			System.err.println(e);
 		}
 		
 	}
-
-	private static void lex(String line, PrintWriter pw) throws IOException {
+	
+    ////////////////////////////////////////////////////////////////
+	//
+	//
+	//
+	private static void lex(String line, PrintWriter pw) throws IOException 
+	{
 		String word = "";
-		//pw.print(scan.next());
 		char[] cArray = line.toCharArray();
-        for (char c : cArray) {
-          switch (c) {
-         case ' ':
-        	 checkword(word, pw);
-        	 word = "";
-        	 break;
-         case '+': 	 
-         case '-': 
-         case '/':
-         case '*':
-         case '>':
-         case '<':
-         case '=':
-        	 checkword(word, pw);
-        	 pw.printf("%10c%15s\n", c, "Operator");
-        	 word = "";
-        	 break;
-         case '(': 	 
-         case ')': 
-         case '{':
-         case '}':
-         case ';':
-         case ',':
-        	 checkword(word, pw);
-        	 pw.printf("%10c%15s\n", c, "Separator");
-        	 word = "";
-        	 break;
-         default: 
-        	 word += c;
-          }	  
-		}
+        for (char c : cArray) 
+        {
+          switch (c) 
+          {
+          	case ' ':
+          	case '	':
+          		checkword(word, pw);
+          		word = "";
+          		break;
+          	case '+': 	 
+          	case '-': 
+          	case '/':
+          	case '*':
+          	case '>':
+          	case '<':
+          	case '=':
+          		checkword(word, pw);
+          		pw.printf("%10c%15s\n", c, "Operator");
+          		word = "";
+          		break;
+          	case '(': 	 
+          	case ')': 
+          	case '{':
+          	case '}':
+          	case ';':
+          	case ',':
+          		checkword(word, pw);
+          		pw.printf("%10c%15s\n", c, "Separator");
+          		word = "";
+          		break;
+          	default: 
+          		word += c;
+          }
           
 		}
-
-	private static void checkword(String word, PrintWriter pw) {
-		
-		switch (word) {
+        checkword(word, pw); 
+		}
+    ///////////////////////////////////////////////////////////
+	//
+	//
+	//
+	private static void checkword(String word, PrintWriter pw) 
+	{
+	   switch (word) 
+		{
 		case "Integer":
 		case "Float":
 		case "Function": 
@@ -86,16 +106,18 @@ public class main {
 			break;
 		case "":
 		case " ":
+		case "	":
 			break;			
 		default:
 			if (word.charAt(0)>= '0' && word.charAt(0) <= '9')
 			{
-				for (char c : word.toCharArray()) {
-					if(c == '.') {
+				for (char c : word.toCharArray()) 
+				{
+					if(c == '.') 
+					{
 						pw.printf("%10s%15s\n", word, "float");
 						return;
-					}
-					
+					}	
 				}
 				pw.printf("%10s%15s\n", word, "Integer");
 				return;
@@ -104,5 +126,4 @@ public class main {
 			return;
 		}
 	}
-
 }
