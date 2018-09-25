@@ -1,46 +1,58 @@
 import java.io.BufferedReader;
-import java.io.File;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
 
 public class main {
-
+	private static final String[] keywords = new String[] {	
+			"Integer", "Float", "Function", 
+			"If", "Else", "Return", "Write", 
+			"DOWhile"
+															};
+	private static final String[] Operators = new String[] {	
+			"+", "-", "*", 
+			"/", "<=", ">=", "=", 
+			"++"
+			};
+	private static final String[] Separators = new String[] {	
+			"{", "}", "(", 
+			")", ",", ";"
+			};
+	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		Scanner fscan;
 		BufferedReader br;
 		FileReader fr;
+		BufferedWriter bw;
 		String line;
 		try {
 			 // FileReader reads text files in the default encoding.
-            FileReader fileReader = 
-                new FileReader("APU_CS370_input.txt");
+            fr = new FileReader("APU_CS370_input.txt");
 
             // Always wrap FileReader in BufferedReader.
-            BufferedReader bufferedReader = 
-                new BufferedReader(fileReader);
+            br = new BufferedReader(fr);
+            bw = new BufferedWriter(new FileWriter("APU_CS370_output.txt"));
 
-            while((line = bufferedReader.readLine()) != null) {
-                lex(line);
+            while((line = br.readLine()) != null) {
+                lex(line, bw );
             }   
 
             // Always close files.
-            bufferedReader.close();  
+            br.close();  
 		}catch (Exception e) {
-			// TODO: handle exception
+		
 			System.err.println(e);
 		}
 		
 	}
 
-	private static void lex(String line) throws IOException {
-		// TODO Auto-generated method stub
+	private static void lex(String line, BufferedWriter bw) throws IOException {
+		
 		
           char[] cArray = line.toCharArray();
           for (char c : cArray) {
         	  if (c != ' ')
-			System.out.println(c);
+			bw.write(c);
 		}
 		}
 
