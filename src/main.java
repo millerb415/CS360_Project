@@ -18,7 +18,7 @@ public class main
 		PrintWriter pw;
 		String line;
 		FileWriter fw;
-		try 
+		try 												// code for reading in files
 		{
             fr = new FileReader("APU_CS370_input.txt");
             fw = new FileWriter("APU_CS370_output.txt");
@@ -51,16 +51,16 @@ public class main
 	private static void lex(String line, PrintWriter pw) throws IOException 
 	{
 		String word = "";
-        for (char c : line.toCharArray()) 
+        for (char c : line.toCharArray()) 		// loops through each character
         {
-          switch (c) 
+          switch (c) 							// switch statement for each character case
           {
           	case ' ':
           	case '	':
-          		checkword(word, pw);
+          		checkword(word, pw);			// calls checkword function to show type of char
           		word = "";
           		break;
-          	case '+': 	 
+          	case '+': 	 						// cases for operators
           	case '-': 
           	case '/':
           	case '*':
@@ -68,10 +68,10 @@ public class main
           	case '<':
           	case '=':
           		checkword(word, pw);
-          		pw.printf("%10c%15s\n", c, "Operator");
+          		pw.printf("%10c%15s\n", c, "Operator");		// formatted print statement
           		word = "";
           		break;
-          	case '(': 	 
+          	case '(': 	 						// cases for separators
           	case ')': 
           	case '{':
           	case '}':
@@ -82,7 +82,7 @@ public class main
           		word = "";
           		break;
           	default: 
-          		word += c;
+          		word += c;						// moves on to next character
           }
           
 		}
@@ -95,9 +95,9 @@ public class main
 	//
 	private static void checkword(String word, PrintWriter pw) 
 	{
-	   switch (word) 
+	   switch (word) 							// switch statement for 
 		{
-		case "Integer":
+		case "Integer":							// prints the word in each respective case
 		case "Float":
 		case "Function": 
 		case "If":
@@ -106,27 +106,27 @@ public class main
 		case "Return":
 		case "Write": 
 		case "DOWhile":
-			pw.printf("%10s%15s\n", word, "Keyword");
+			pw.printf("%10s%15s\n", word, "Keyword");		// formatted print statement
 			break;
 		case "":
 		case " ":
 		case "	":
 			break;			
 		default:
-			if (word.charAt(0)>= '0' && word.charAt(0) <= '9')
+			if (word.charAt(0)>= '0' && word.charAt(0) <= '9')	// checks to see if char is a number
 			{
 				for (char c : word.toCharArray()) 
 				{
-					if(c == '.') 
+					if(c == '.') 								// checks for decimal to change to float
 					{
 						pw.printf("%10s%15s\n", word, "float");
 						return;
 					}	
 				}
-				pw.printf("%10s%15s\n", word, "Integer");
+				pw.printf("%10s%15s\n", word, "Integer");		// if no decimal is found change to int
 				return;
 			}
-			pw.printf("%10s%15s\n", word,"Identifier");
+			pw.printf("%10s%15s\n", word,"Identifier");			// if no number is found change to identifier
 			return;
 		}
 	}
