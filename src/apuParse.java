@@ -10,16 +10,11 @@ public class apuParse{
 	private BufferedReader br;
 	private FileReader fr;
 	private PrintWriter pw;
-	
 	private FileWriter fw;
 	private boolean ifRead;
-	public void
-	apuParse(String in, String out) {
-		readin = in;
-		readout = out;		
-	}
+	
 
-	public void read() {
+	public apuParse(String in, String out) {
 		BufferedReader br;
 		FileReader fr;
 		PrintWriter pw;
@@ -27,8 +22,8 @@ public class apuParse{
 		FileWriter fw;
 		try 												// code for reading in files
 		{
-            fr = new FileReader(readin);
-            fw = new FileWriter(readout);
+            fr = new FileReader(in);
+            fw = new FileWriter(out);
             br = new BufferedReader(fr);
             pw = new PrintWriter(fw, true);
             pw.print("Group Name(3) – Members(Micah Edington, Ryan Alcantra, Brandon Miller)\n");
@@ -40,10 +35,12 @@ public class apuParse{
 		{
 		
 			System.err.println(e);
-		}
+		}	
 	}
 	
-	
+	/**
+	 * 
+	 */
 	private void APUMAIN() {
 		// TODO Auto-generated method stub
 		
