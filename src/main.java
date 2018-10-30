@@ -14,7 +14,12 @@ public class main
 	public static void main(String[] args) 
 	{
 		apuParse apu = new apuParse("APU_CS370_input.txt", "APU_CS370_output.txt" );
-		
+		try {
+			apu.checkLex();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	////////////////////////////////////////////////////////////////

@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Scanner;
 
 public class apuParse{
 	private String readin;
@@ -12,98 +13,274 @@ public class apuParse{
 	private PrintWriter pw;
 	private FileWriter fw;
 	private boolean ifRead;
-	
+	private Scanner scan;
+	private String lastWord = "";
 
-	public apuParse(String in, String out) {
-		BufferedReader br;
-		FileReader fr;
-		PrintWriter pw;
-		String line;
-		FileWriter fw;
-		try 												// code for reading in files
+	public apuParse(String in, String out) 
+	{
+		try 												// code for reading in file
 		{
-            fr = new FileReader(in);
-            fw = new FileWriter(out);
-            br = new BufferedReader(fr);
-            pw = new PrintWriter(fw, true);
-            pw.print("Group Name(3) – Members(Micah Edington, Ryan Alcantra, Brandon Miller)\n");
-            pw.printf("%10s%15s\n", "Lexeme", "Token");
-            pw.println("    ------          -----");
-            ifRead = true;
+			fr = new FileReader(in);
+			fw = new FileWriter(out);
+			br = new BufferedReader(fr);
+			pw = new PrintWriter(fw, true);
+			pw.println("Group Name(3) – Members(Micah Edington, Ryan Alcantra, Brandon Miller)\n");
+			ifRead = true;
 		}
 		catch (Exception e) 
 		{
-		
+
 			System.err.println(e);
 		}	
 	}
-	
-	/**
-	 * 
-	 */
-	private void APUMAIN() {
-		// TODO Auto-generated method stub
-		
+
+	public boolean checkLex() throws IOException 
+	{
+		boolean check = APUMAIN();
+			
+		if (check) {
+			pw.println("Syntax is correct No errors Found");
+		}
+		return check;
+	}
+	////////////////////////////////////
+	//
+	private boolean APUMAIN() throws IOException 
+	{
+		pw.println("<APU_CS370> ::= void main() { <statement> }");
+		String line = br.readLine(); 
+		scan = new Scanner(line);
+		String word = scan.next();
+		if (word.equals("void")) 
+		{
+			if (getNextWord().equals("main")) 
+			{
+				if(getNextWord().equals("(")) 
+				{
+					if (getNextWord().equals(")")) 
+					{
+
+						if(getNextWord().equals("{"))
+						{
+							return APUSTATE();
+						}
+						else 
+						{
+							error("{");
+						}
+
+					}
+					else 
+					{
+						error(")");
+					}
+
+				}
+
+				else 
+				{
+					error("(");
+				}
+			}
+			else {
+				error("main");
+
+			}
+
+		}
+
+		else 
+		{
+			error("void");
+		}
+		return false;
 	}
 
-	
-	private void APUINT() {
-		// TODO Auto-generated method stub
-		
+
+	private boolean APUSTATE() throws IOException {
+		boolean isEmpty = true;
+		pw.print("<Statement> ::= ");
+		boolean isvalid = true;
+		String word;
+		do {
+			word = getNextWord();
+			switch (word) {	
+			case "Float":
+			case "Function": 
+			case "Integer":
+				pw.println("<Declaration>");
+				isvalid = APUINT();
+				break;
+			case "Print":
+			case "Else":
+			case "Return":
+			case "Write": 
+			case "If": 
+				pw.println("<If statement>");
+				isvalid = APUIF();
+				break;
+			case "DOWhile":
+			default:
+				break;
+			}
+			if (!isvalid) {
+				break;
+			}
+		}while (!word.equals("}") );
+		scan.close();
+		if (isEmpty)
+		{
+			pw.println("< Empty >");
+			pw.println("< Empty > ::= Epsilon");
+			return true;
+		}
+		if (!word.equals("}"))
+			return false;
+
+		return true;
 	}
 
-	private void APUFLOAT() {
-		// TODO Auto-generated method stub
-		
+	private boolean APUINT() 
+	{
+		pw.println("<Declaration> ::= Integer <Identifier> = <Integer>;");
+		return false;
 	}
 
-	
-	private void APUFUN() {
-		// TODO Auto-generated method stub
-		
-	}
+	private boolean APUFLOAT() 
+	{
 
-	
-	private void APUIF() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void APUPRINT() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	
-	private void APUELSE() {
-		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
 
-	private void APURETURN() {
-		// TODO Auto-generated method stub
-		
+	private boolean APUFUN() 
+	{
+
+		return false;
 	}
 
-	private void APUWRITE() {
-		// TODO Auto-generated method stub
-		
+
+	private boolean APUIF() 
+	{
+
+		return false;
 	}
 
-	private void APUDOWHILE() {
-		// TODO Auto-generated method stub
-		
+	private boolean APUPRINT() 
+	{
+
+		return false;
 	}
-	private String nextline() {
-	 String line = "";
-		
+
+
+	private boolean APUELSE() 
+	{
+
+		return false;
+	}
+
+
+	private boolean APURETURN() 
+	{
+
+		return false;
+	}
+
+	private boolean APUWRITE() 
+	{
+
+		return false;
+	}
+
+	private boolean APUDOWHILE() 
+	{
+
+		return false;
+	}
+
+	private String nextline() 
+	{
+		String line = "";
+
 		return line;
 	}
-	public void close() throws IOException {
+	public void close() throws IOException 
+	{
 		br.close();
-        pw.close();
-        System.out.println("Done!");
+		pw.close();
+		System.out.println("Done!");
+	}
+	private void error(String err) 
+	{ 
+		pw.println("***************************************************");
+		pw.println("An error Is found: description Below");
+		pw.println("Missing '" + err + "'");
+		pw.println("*****************************************************");
+		pw.println();
+		pw.println();
+		pw.println();
+		pw.println("Syntax is Incorrect. Check error above. Total error(s) found 1");
+	}
+	private String getNextWord() throws IOException{
+		String word = "";
+		if(!scan.hasNext() || !lastWord.isEmpty())
+		{
+			if(!lastWord.isEmpty()) {
+				return genareateNextWord(lastWord);
+			}
+			
+			String word1 = br.readLine();
+			if (word1.length() == 0)
+				return "";
+			scan.close();
+			scan = new Scanner(word1);
+		}
+		return genareateNextWord(scan.next());
+
+
+	}
+
+	private String genareateNextWord(String word1) 
+	{
+		if (word1.length() == 1) 
+		{
+			lastWord = "";
+			return word1;
+		}
+		char[] carray = word1.toCharArray();
+		String word= "";
+
+		for (int i =0; i < carray.length; i ++ ) 		
+		{
+			switch (carray[i]) 							
+			{
+			case '+': 	 						
+			case '-': 
+			case '/':
+			case '*':
+			case '>':
+			case '<':
+			case '=':
+			case '(': 	 					
+			case ')': 
+			case '{':
+			case '}':
+			case ';':
+			case ',':
+				if (i == 0) {
+				word += carray[0];
+				i = 1;
+				lastWord = "";
+				}
+				for (int j = i; j < carray.length; j++)
+					lastWord += carray[j];
+				return word;
+			default: 
+				word += carray[i];					
+			}
+
+		}
+		return word;
 	}
 
 }

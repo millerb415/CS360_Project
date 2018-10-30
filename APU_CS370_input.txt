@@ -1,10 +1,2 @@
-Function Add (Integer A,
-Integer B)
-{
-Return (A+B);
+void main()
 }
-Integer A,Integer B;
-A=5;
-B=5;
-Integer Ret=Add(A,B);
-Print (Ret);

@@ -1,50 +1,11 @@
-Group Name(3) – Members(Micah Edington, Ryan Alcantra,Brandon Miller)
-    Lexeme          Token
-    ------          -----
-  Function        Keyword
-       Add     Identifier
-         (      Separator
-   Integer        Keyword
-         A     Identifier
-         ,      Separator
-   Integer        Keyword
-         B     Identifier
-         )      Separator
-         {      Separator
-    Return        Keyword
-         (      Separator
-         A     Identifier
-         +       Operator
-         B     Identifier
-         )      Separator
-         ;      Separator
-         }      Separator
-   Integer        Keyword
-         A     Identifier
-         ,      Separator
-   Integer        Keyword
-         B     Identifier
-         ;      Separator
-         A     Identifier
-         =       Operator
-         5        Integer
-         ;      Separator
-         B     Identifier
-         =       Operator
-         5        Integer
-         ;      Separator
-   Integer        Keyword
-       Ret     Identifier
-         =       Operator
-       Add     Identifier
-         (      Separator
-         A     Identifier
-         ,      Separator
-         B     Identifier
-         )      Separator
-         ;      Separator
-     Print        Keyword
-         (      Separator
-       Ret     Identifier
-         )      Separator
-         ;      Separator
+Group Name(3) – Members(Micah Edington, Ryan Alcantra, Brandon Miller)
+
+<APU_CS370> ::= void main() { <statement> }
+***************************************************
+An error Is found: description Below
+Missing '{'
+*****************************************************
+
+
+
+Syntax is Incorrect. Check error above. Total error(s) found 1
