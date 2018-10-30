@@ -1,9 +1,11 @@
 Group Name(3) – Members(Micah Edington, Ryan Alcantra, Brandon Miller)
 
 <APU_CS370> ::= void main() { <statement> }
+<Statement> ::= < Empty >
+< Empty > ::= Epsilon
 ***************************************************
 An error Is found: description Below
-Missing '{'
+Missing '}'
 *****************************************************
 
 

@@ -6,8 +6,8 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class apuParse{
-	private String readin;
-	private String readout;
+//	private String readin;
+//	private String readout;
 	private BufferedReader br;
 	private FileReader fr;
 	private PrintWriter pw;
@@ -15,6 +15,7 @@ public class apuParse{
 	private boolean ifRead;
 	private Scanner scan;
 	private String lastWord = "";
+	private boolean scanOpen = false;
 
 	public apuParse(String in, String out) 
 	{
@@ -37,7 +38,7 @@ public class apuParse{
 	public boolean checkLex() throws IOException 
 	{
 		boolean check = APUMAIN();
-			
+
 		if (check) {
 			pw.println("Syntax is correct No errors Found");
 		}
@@ -48,10 +49,9 @@ public class apuParse{
 	private boolean APUMAIN() throws IOException 
 	{
 		pw.println("<APU_CS370> ::= void main() { <statement> }");
-		String line = br.readLine(); 
-		scan = new Scanner(line);
-		String word = scan.next();
-		if (word.equals("void")) 
+	
+		boolean valid = false;
+		if (getNextWord().equals("void")) 
 		{
 			if (getNextWord().equals("main")) 
 			{
@@ -59,41 +59,35 @@ public class apuParse{
 				{
 					if (getNextWord().equals(")")) 
 					{
-
 						if(getNextWord().equals("{"))
 						{
-							return APUSTATE();
+							valid =  APUSTATE();
 						}
 						else 
 						{
 							error("{");
 						}
-
 					}
 					else 
 					{
 						error(")");
 					}
-
 				}
-
 				else 
 				{
 					error("(");
 				}
 			}
-			else {
+			else 
+			{
 				error("main");
-
 			}
-
 		}
-
 		else 
 		{
 			error("void");
 		}
-		return false;
+		return valid;
 	}
 
 
@@ -101,8 +95,9 @@ public class apuParse{
 		boolean isEmpty = true;
 		pw.print("<Statement> ::= ");
 		boolean isvalid = true;
-		String word;
-		do {
+		String word = "";
+		while (!word.equals("}") && br.ready() ) 
+		{
 			word = getNextWord();
 			switch (word) {	
 			case "Float":
@@ -110,6 +105,7 @@ public class apuParse{
 			case "Integer":
 				pw.println("<Declaration>");
 				isvalid = APUINT();
+				isEmpty = false;
 				break;
 			case "Print":
 			case "Else":
@@ -118,6 +114,7 @@ public class apuParse{
 			case "If": 
 				pw.println("<If statement>");
 				isvalid = APUIF();
+				isEmpty = false;
 				break;
 			case "DOWhile":
 			default:
@@ -126,17 +123,18 @@ public class apuParse{
 			if (!isvalid) {
 				break;
 			}
-		}while (!word.equals("}") );
+		}
 		scan.close();
 		if (isEmpty)
 		{
 			pw.println("< Empty >");
 			pw.println("< Empty > ::= Epsilon");
-			return true;
 		}
 		if (!word.equals("}"))
+		{
+			error("}");
 			return false;
-
+		}
 		return true;
 	}
 
@@ -223,12 +221,17 @@ public class apuParse{
 	}
 	private String getNextWord() throws IOException{
 		String word = "";
+		if (!scanOpen){
+			scan = new Scanner(br.readLine());
+			scanOpen = true;
+			return genareateNextWord(scan.next());
+		}
 		if(!scan.hasNext() || !lastWord.isEmpty())
 		{
 			if(!lastWord.isEmpty()) {
 				return genareateNextWord(lastWord);
 			}
-			
+
 			String word1 = br.readLine();
 			if (word1.length() == 0)
 				return "";
@@ -268,9 +271,9 @@ public class apuParse{
 			case ';':
 			case ',':
 				if (i == 0) {
-				word += carray[0];
-				i = 1;
-				lastWord = "";
+					word += carray[0];
+					i = 1;
+					lastWord = "";
 				}
 				for (int j = i; j < carray.length; j++)
 					lastWord += carray[j];
@@ -278,9 +281,7 @@ public class apuParse{
 			default: 
 				word += carray[i];					
 			}
-
 		}
 		return word;
 	}
-
 }
