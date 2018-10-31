@@ -134,32 +134,135 @@ public class apuParse{
 		}
 		return true;
 	}
-	private boolean APUIF() 
+	private boolean APUIF() throws IOException 
 	{
-
-		return false;
+		boolean isValid = false;
+		if( getNextWord().equals("(")) 
+		{
+			if(APUCONDI())
+			{
+				if(getNextWord().equals(")"))
+				{
+					if (getNextWord().equals("{")) 
+					{
+						if (APUSTATE()) {
+							if(getNextWord().equals("}")) 
+							{
+								String word = getNextWord();
+								if (word.equals("Else")) 
+								{
+									if (getNextWord().equals("{")) 
+									{
+										if (APUSTATE()) {
+											if(getNextWord().equals("}")) 
+											{
+												isValid= true;
+											}
+											else 
+											{
+											error("}");	
+											}
+										}
+									}
+									else
+									{
+										error("{");
+									}
+								}
+								else
+								{
+									lastWord = word + " " + lastWord;
+									isValid = true;
+								}
+							}
+							else 
+							{
+							error("}");	
+							}
+						}
+					}
+					else
+					{
+						error("{");
+					}
+				}
+				else 
+				{
+					error(")");
+				}
+			}
+		}
+		else
+		{
+			error("(");
+		}
+		return isValid;
 	}
 	private boolean APUDOWHILE() 
 	{
 
 		return false;
 	}
-	private boolean APUDECL(String type) 
-	{
+	private boolean APUDECL(String type) throws IOException 
+	{ 
 		if (type.equals("Integer")) {
 			return APUINTEGER();
 		}
 		return APUFLOAT();
 	}
-	private boolean APUINTEGER() 
-	{
+	private boolean APUINTEGER() throws IOException 
+	{  
 		pw.println("<Declaration> ::= Integer <Identifier> = <Integer>;");
-		return false;
+		boolean isValid = false;
+		if (APUIDENTIFIER()) 
+		{
+			if(getNextWord().equals("=")) 
+			{
+				if(APUINT()) 
+				{
+					if(getNextWord().equals(";"))
+					{
+						isValid = true;
+					}
+					else
+					{
+						error(";");
+					}
+				}
+			}
+			else 
+			{
+				error("=");
+			}
+		}
+		return isValid;
 	}
-	private boolean APUFLOAT() 
+	private boolean APUFLOAT() throws IOException 
 	{
 		pw.println("<Declaration> ::= Float <Identifier> = <Float>;");
-		return false;
+		boolean isValid = false;
+		if (APUIDENTIFIER()) 
+		{
+			if(getNextWord().equals("=")) 
+			{
+				if(APUFLO()) 
+				{
+					if(getNextWord().equals(";"))
+					{
+						isValid = true;
+					}
+					else
+					{
+						error(";");
+					}
+				}
+			}
+			else {
+				error("=");
+			}
+		}
+		
+		return isValid;
 	}
 	private boolean APUASSIGN() 
 	{
@@ -182,7 +285,7 @@ public class apuParse{
 				word = "" + lastWord.charAt(0);
 				if (lastWord.length() > 1) 
 				{
-				lastWord = lastWord.substring(1);
+					lastWord = lastWord.substring(1);
 				}
 				else {
 					lastWord = "";
@@ -194,7 +297,7 @@ public class apuParse{
 				word += lastWord.charAt(1);
 				if (lastWord.length() > 2) 
 				{
-				lastWord = lastWord.substring(2);
+					lastWord = lastWord.substring(2);
 				}
 				else {
 					lastWord = "";
@@ -303,19 +406,22 @@ public class apuParse{
 				{
 					if ((carray[1] == '=') )
 					{
+						lastWord = "";
 						for (int j = i; j < carray.length; j++)
 							lastWord += carray[j];
 						return "2CompOperator";
 					}
 					else if(carray[0] != '=' && carray[0] != '!') {
+						lastWord = "";
 						for (int j = i; j < carray.length; j++)
+						
 							lastWord += carray[j];
 						return "1CompOperator";
 					}
 				}
 				else if (carray[0] != '=' && 
-						 carray[0] != '!' && 
-						 i == 0 			) 
+						carray[0] != '!' && 
+						i == 0 			) 
 				{
 					for (int j = i; j < carray.length; j++)
 						lastWord += carray[j];
