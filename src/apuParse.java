@@ -6,8 +6,8 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class apuParse{
-//	private String readin;
-//	private String readout;
+	//	private String readin;
+	//	private String readout;
 	private BufferedReader br;
 	private FileReader fr;
 	private PrintWriter pw;
@@ -49,7 +49,6 @@ public class apuParse{
 	private boolean APUMAIN() throws IOException 
 	{
 		pw.println("<APU_CS370> ::= void main() { <statement> }");
-	
 		boolean valid = false;
 		if (getNextWord().equals("void")) 
 		{
@@ -93,7 +92,6 @@ public class apuParse{
 
 	private boolean APUSTATE() throws IOException {
 		boolean isEmpty = true;
-		pw.print("<Statement> ::= ");
 		boolean isvalid = true;
 		String word = "";
 		while (!word.equals("}") && br.ready() ) 
@@ -101,22 +99,21 @@ public class apuParse{
 			word = getNextWord();
 			switch (word) {	
 			case "Float":
-			case "Function": 
 			case "Integer":
-				pw.println("<Declaration>");
-				isvalid = APUINT();
+				pw.println("<Statement> ::= <Declaration>");
+				isvalid = APUDECL(word);
 				isEmpty = false;
 				break;
-			case "Print":
-			case "Else":
-			case "Return":
-			case "Write": 
 			case "If": 
-				pw.println("<If statement>");
+				pw.println("<Statement> ::= <If statement>");
 				isvalid = APUIF();
 				isEmpty = false;
 				break;
 			case "DOWhile":
+				pw.println("<Statement> ::= <DOWhile statement>");
+				isvalid = APUINTEGER();
+				isEmpty = false;
+				break;
 			default:
 				break;
 			}
@@ -137,70 +134,110 @@ public class apuParse{
 		}
 		return true;
 	}
-
-	private boolean APUINT() 
-	{
-		pw.println("<Declaration> ::= Integer <Identifier> = <Integer>;");
-		return false;
-	}
-
-	private boolean APUFLOAT() 
-	{
-
-		return false;
-	}
-
-
-	private boolean APUFUN() 
-	{
-
-		return false;
-	}
-
-
 	private boolean APUIF() 
 	{
 
 		return false;
 	}
-
-	private boolean APUPRINT() 
-	{
-
-		return false;
-	}
-
-
-	private boolean APUELSE() 
-	{
-
-		return false;
-	}
-
-
-	private boolean APURETURN() 
-	{
-
-		return false;
-	}
-
-	private boolean APUWRITE() 
-	{
-
-		return false;
-	}
-
 	private boolean APUDOWHILE() 
 	{
 
 		return false;
 	}
-
-	private String nextline() 
+	private boolean APUDECL(String type) 
 	{
-		String line = "";
+		if (type.equals("Integer")) {
+			return APUINTEGER();
+		}
+		return APUFLOAT();
+	}
+	private boolean APUINTEGER() 
+	{
+		pw.println("<Declaration> ::= Integer <Identifier> = <Integer>;");
+		return false;
+	}
+	private boolean APUFLOAT() 
+	{
+		pw.println("<Declaration> ::= Float <Identifier> = <Float>;");
+		return false;
+	}
+	private boolean APUASSIGN() 
+	{
 
-		return line;
+		return false;
+	}
+	private boolean APUCONDI() 
+	{
+
+		return false;
+	}
+	private boolean APUCOMPOP() throws IOException 
+	{
+		String word = getNextWord();
+		pw.println("<CompOperator> ::= == | > | < | >= | <= | != ");
+		if (word.substring(1).equals("CompOperator")) 
+		{
+			if(word.charAt(0) == '1') 
+			{
+				word = "" + lastWord.charAt(0);
+				if (lastWord.length() > 1) 
+				{
+				lastWord = lastWord.substring(1);
+				}
+				else {
+					lastWord = "";
+				}
+			}
+			else 
+			{
+				word = "" + lastWord.charAt(0);
+				word += lastWord.charAt(1);
+				if (lastWord.length() > 2) 
+				{
+				lastWord = lastWord.substring(2);
+				}
+				else {
+					lastWord = "";
+				}
+			}
+			pw.println("<CompOperator> ::= " + word );
+			return true;
+		}
+
+		return false;
+	}
+	private boolean APUEXPRESS() 
+	{
+		return false;
+	}
+	private boolean APUTERM() 
+	{
+		return false;
+	}
+	private boolean APUAPUFACTOR() 
+	{
+
+		return false;
+	}
+	private boolean APUIDENTIFIER() 
+	{
+
+		return false;
+	}
+	private boolean APULETTER() 
+	{
+
+		return false;
+	}
+	private boolean APUINT() 
+	{
+
+		return false;
+	}
+	private boolean APUFLO() 
+	{
+
+		return false;
 	}
 	public void close() throws IOException 
 	{
@@ -221,7 +258,8 @@ public class apuParse{
 	}
 	private String getNextWord() throws IOException{
 		String word = "";
-		if (!scanOpen){
+		if (!scanOpen)
+		{
 			scan = new Scanner(br.readLine());
 			scanOpen = true;
 			return genareateNextWord(scan.next());
@@ -245,11 +283,6 @@ public class apuParse{
 
 	private String genareateNextWord(String word1) 
 	{
-		if (word1.length() == 1) 
-		{
-			lastWord = "";
-			return word1;
-		}
 		char[] carray = word1.toCharArray();
 		String word= "";
 
@@ -261,9 +294,33 @@ public class apuParse{
 			case '-': 
 			case '/':
 			case '*':
+				break;
+			case '!':
 			case '>':
 			case '<':
 			case '=':
+				if (carray.length > 1 && i == 0) 
+				{
+					if ((carray[1] == '=') )
+					{
+						for (int j = i; j < carray.length; j++)
+							lastWord += carray[j];
+						return "2CompOperator";
+					}
+					else if(carray[0] != '=' && carray[0] != '!') {
+						for (int j = i; j < carray.length; j++)
+							lastWord += carray[j];
+						return "1CompOperator";
+					}
+				}
+				else if (carray[0] != '=' && 
+						 carray[0] != '!' && 
+						 i == 0 			) 
+				{
+					for (int j = i; j < carray.length; j++)
+						lastWord += carray[j];
+					return "1CompOperator";
+				}
 			case '(': 	 					
 			case ')': 
 			case '{':
