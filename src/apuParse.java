@@ -198,10 +198,45 @@ public class apuParse{
 		}
 		return isValid;
 	}
-	private boolean APUDOWHILE() 
+	private boolean APUDOWHILE() throws IOException
 	{
-
-		return false;
+		boolean isValid = false;
+		if (getNextWord().equals("("))
+		{
+			if (APUCONDI())
+			{
+				if (getNextWord().equals(")"))
+				{
+					if (getNextWord().equals("{"))
+					{
+						if (APUSTATE())
+						{
+							if (getNextWord().equals("}"))
+							{
+								isValid = true;
+							}
+							else
+							{
+								error("}");
+							}
+						}
+					}
+					else
+					{
+						error("}");
+					}
+				}
+				else 
+				{
+					error(")");
+				}
+			}
+		}
+		else 
+		{
+			error("(");
+		}
+		return isValid;
 	}
 	private boolean APUDECL(String type) throws IOException 
 	{ 
@@ -264,15 +299,46 @@ public class apuParse{
 		
 		return isValid;
 	}
-	private boolean APUASSIGN() 
+	private boolean APUASSIGN() throws IOException
 	{
-
-		return false;
+		boolean isValid = false;
+		if (APUIDENTIFIER())
+		{
+			if (getNextWord().equals("="))
+			{
+				if (APUEXPRESS())
+				{
+					if (getNextWord().equals(";"))
+					{
+						isValid = true;
+					}
+					else 
+					{
+						error(";");
+					}
+				}
+			}
+			else 
+			{
+				error("=");
+			}
+		}
+		return isValid;
 	}
-	private boolean APUCONDI() 
+	private boolean APUCONDI() throws IOException
 	{
-
-		return false;
+		boolean isValid = false;
+		if (APUEXPRESS())
+		{
+			if (APUCOMPOP())
+			{
+				if (APUEXPRESS()) 
+				{
+					isValid = true;
+				}
+			}
+		}
+		return isValid;
 	}
 	private boolean APUCOMPOP() throws IOException 
 	{
@@ -309,38 +375,118 @@ public class apuParse{
 
 		return false;
 	}
-	private boolean APUEXPRESS() 
+	private boolean APUEXPRESS() throws IOException
 	{
-		return false;
+		boolean isValid = false;
+		if (APUEXPRESS())
+		{
+			if (getNextWord().equals("+"))
+			{
+				if (APUTERM())
+				{
+					isValid = true;
+				}
+			}
+			else if (getNextWord().equals("-"))
+			{
+				if (APUTERM())
+				{
+					isValid = true;
+				}
+			}
+			else 
+			{
+				error("+");
+			}
+		}
+		else if (APUTERM()) 
+		{
+			isValid = true;
+		}
+		
+		return isValid;
 	}
-	private boolean APUTERM() 
+	private boolean APUTERM() throws IOException
 	{
-		return false;
+		boolean isValid = false;
+		if (APUTERM())
+		{
+			if (getNextWord().equals("*"))
+			{
+				if (APUFACTOR())
+				{
+					isValid = true;
+				}
+			}
+			else if (getNextWord().equals("/"))
+			{
+				if (APUFACTOR())
+				{
+					isValid = true;
+				}
+			}
+			else 
+			{
+				error("*");
+			}
+		}
+		else if (APUFACTOR()) 
+		{
+			isValid = true;
+		}
+		
+		return isValid;
 	}
-	private boolean APUAPUFACTOR() 
+	private boolean APUFACTOR() throws IOException
 	{
-
-		return false;
+		boolean isValid = false;
+		if (APUIDENTIFIER()) 
+		{
+			if (APUINT()) 
+			{
+				if (APUFLO()) 
+				{
+					isValid = true;
+				}
+			}
+		}
+		return isValid;
 	}
-	private boolean APUIDENTIFIER() 
+	private boolean APUIDENTIFIER() throws IOException
 	{
-
-		return false;
+		boolean isValid = false;
+		if (APULETTER()) 
+		{
+			isValid = true;
+		}
+		return isValid;
 	}
-	private boolean APULETTER() 
+	private boolean APULETTER() throws IOException
 	{
-
-		return false;
+		boolean isValid = false;
+		if (getNextWord().matches("[a-zA-Z]+"))
+		{
+			isValid = true;
+		}
+		return isValid;
 	}
-	private boolean APUINT() 
+	private boolean APUINT() throws IOException 
 	{
-
-		return false;
+		boolean isValid = false;
+		if (getNextWord().matches("[0-9]+"))
+		{
+			isValid = true;
+		}
+		return isValid;
 	}
-	private boolean APUFLO() 
+	private boolean APUFLO() throws IOException
 	{
-
-		return false;
+		boolean isValid = false;
+		if (getNextWord().matches("[-+]?[0-9]*\\.?[0-9]+"))
+		{
+			isValid = true;
+		}
+		return isValid;
 	}
 	public void close() throws IOException 
 	{

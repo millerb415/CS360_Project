@@ -1,0 +1,14 @@
+Function Add (Integer A,Integer CC)
+{
+Return (A+CC);
+}
+Function Sub (Integer A,Integer CC)
+{
+Return (A-CC);
+}
+Integer A;
+Integer B;
+A=5;
+B=5;
+Add(A,B);
+Sub(A,B);

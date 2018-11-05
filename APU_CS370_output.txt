@@ -1,11 +1,6 @@
 Group Name(3) – Members(Micah Edington, Ryan Alcantra, Brandon Miller)
 
 <APU_CS370> ::= void main() { <statement> }
-***************************************************
-An error Is found: description Below
-Missing ')'
-*****************************************************
-
-
-
-Syntax is Incorrect. Check error above. Total error(s) found 1
+< Empty >
+< Empty > ::= Epsilon
+Syntax is correct No errors Found
