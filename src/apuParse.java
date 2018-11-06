@@ -16,7 +16,6 @@ public class apuParse{
 	private Scanner scan;
 	private String lastWord = "";
 	private boolean scanOpen = false;
-
 	public apuParse(String in, String out) 
 	{
 		try 												// code for reading in file
@@ -34,7 +33,6 @@ public class apuParse{
 			System.err.println(e);
 		}	
 	}
-
 	public boolean checkLex() throws IOException 
 	{
 		boolean check = APUMAIN();
@@ -44,8 +42,6 @@ public class apuParse{
 		}
 		return check;
 	}
-	////////////////////////////////////
-	//
 	private boolean APUMAIN() throws IOException 
 	{
 		pw.println("<APU_CS370> ::= void main() { <statement> }");
@@ -88,8 +84,6 @@ public class apuParse{
 		}
 		return valid;
 	}
-
-
 	private boolean APUSTATE() throws IOException {
 		boolean isEmpty = true;
 		boolean isvalid = true;
@@ -102,16 +96,19 @@ public class apuParse{
 			case "Integer":
 				pw.println("<Statement> ::= <Declaration>");
 				isvalid = APUDECL(word);
+				word = getNextWord();
 				isEmpty = false;
 				break;
 			case "If": 
 				pw.println("<Statement> ::= <If statement>");
 				isvalid = APUIF();
+				word = getNextWord();
 				isEmpty = false;
 				break;
 			case "DOWhile":
 				pw.println("<Statement> ::= <DOWhile statement>");
-				isvalid = APUINTEGER();
+				isvalid = APUDOWHILE();
+				word = getNextWord();
 				isEmpty = false;
 				break;
 			default:
@@ -121,22 +118,27 @@ public class apuParse{
 				break;
 			}
 		}
-		scan.close();
+		
 		if (isEmpty)
 		{
-			pw.println("< Empty >");
+			pw.println("<Statement> ::= < Empty >");
 			pw.println("< Empty > ::= Epsilon");
 		}
-		if (!word.equals("}"))
+		if (!word.equals("}") && isvalid)
 		{
 			error("}");
-			return false;
 		}
-		return true;
+		else if(word.equals("}"))
+		{
+			lastWord  = "}" + "" + lastWord;
+		}
+		return isvalid;
 	}
 	private boolean APUIF() throws IOException 
-	{
+	{	
+		boolean ifOnly = false;
 		boolean isValid = false;
+		pw.println("<if Statement > ::= If( < Condition > ) { < Statement > }");
 		if( getNextWord().equals("(")) 
 		{
 			if(APUCONDI())
@@ -148,19 +150,21 @@ public class apuParse{
 						if (APUSTATE()) {
 							if(getNextWord().equals("}")) 
 							{
+								
 								String word = getNextWord();
 								if (word.equals("Else")) 
 								{
 									if (getNextWord().equals("{")) 
 									{
-										if (APUSTATE()) {
+										if (APUSTATE()) 
+										{
 											if(getNextWord().equals("}")) 
 											{
 												isValid= true;
 											}
 											else 
 											{
-											error("}");	
+												error("}");	
 											}
 										}
 									}
@@ -171,13 +175,14 @@ public class apuParse{
 								}
 								else
 								{
-									lastWord = word + " " + lastWord;
+									ifOnly= true;
+									lastWord = word + "" + lastWord;
 									isValid = true;
 								}
 							}
 							else 
 							{
-							error("}");	
+								error("}");	
 							}
 						}
 					}
@@ -196,6 +201,7 @@ public class apuParse{
 		{
 			error("(");
 		}
+		
 		return isValid;
 	}
 	private boolean APUDOWHILE() throws IOException
@@ -249,11 +255,11 @@ public class apuParse{
 	{  
 		pw.println("<Declaration> ::= Integer <Identifier> = <Integer>;");
 		boolean isValid = false;
-		if (APUIDENTIFIER()) 
+		if (APUIDENTIFIER(false)) 
 		{
 			if(getNextWord().equals("=")) 
 			{
-				if(APUINT()) 
+				if(APUINT(false)) 
 				{
 					if(getNextWord().equals(";"))
 					{
@@ -269,6 +275,11 @@ public class apuParse{
 			{
 				error("=");
 			}
+
+		}
+		else
+		{
+			error("identifier");
 		}
 		return isValid;
 	}
@@ -276,11 +287,11 @@ public class apuParse{
 	{
 		pw.println("<Declaration> ::= Float <Identifier> = <Float>;");
 		boolean isValid = false;
-		if (APUIDENTIFIER()) 
+		if (APUIDENTIFIER(false)) 
 		{
 			if(getNextWord().equals("=")) 
 			{
-				if(APUFLO()) 
+				if(APUFLO(false)) 
 				{
 					if(getNextWord().equals(";"))
 					{
@@ -296,14 +307,16 @@ public class apuParse{
 				error("=");
 			}
 		}
-		
+
 		return isValid;
 	}
 	private boolean APUASSIGN() throws IOException
 	{
+		pw.println("<Condition> ::= <Identifier> <CompOperator> <Identifier>");
 		boolean isValid = false;
-		if (APUIDENTIFIER())
+		if (APUIDENTIFIER(false))
 		{
+
 			if (getNextWord().equals("="))
 			{
 				if (APUEXPRESS())
@@ -327,12 +340,13 @@ public class apuParse{
 	}
 	private boolean APUCONDI() throws IOException
 	{
+		pw.println("<Condition> ::= <Identifier> <CompOperator> <Identifier>");
 		boolean isValid = false;
-		if (APUEXPRESS())
+		if (APUIDENTIFIER(false))
 		{
 			if (APUCOMPOP())
 			{
-				if (APUEXPRESS()) 
+				if (APUIDENTIFIER(false)) 
 				{
 					isValid = true;
 				}
@@ -372,12 +386,20 @@ public class apuParse{
 			pw.println("<CompOperator> ::= " + word );
 			return true;
 		}
-
 		return false;
 	}
 	private boolean APUEXPRESS() throws IOException
 	{
 		boolean isValid = false;
+
+		if (APUTERM()) 
+		{
+			isValid = true;
+		}
+		else 
+		{
+
+		}
 		if (APUEXPRESS())
 		{
 			if (getNextWord().equals("+"))
@@ -399,92 +421,136 @@ public class apuParse{
 				error("+");
 			}
 		}
-		else if (APUTERM()) 
-		{
-			isValid = true;
-		}
-		
+
 		return isValid;
 	}
 	private boolean APUTERM() throws IOException
-	{
+	{ 
+		String word = "";
+		pw.println("<Term> ::= <Term> * <Factor> | <Term> /<Factor> | <Factor>");
 		boolean isValid = false;
-		if (APUTERM())
+		if (APUFACTOR(true)) 
 		{
-			if (getNextWord().equals("*"))
+			isValid = true;
+		}
+		else if (APUTERM())
+		{
+			word = getNextWord();
+			if (word.equals("*"))
 			{
-				if (APUFACTOR())
+				if (APUFACTOR(false))
 				{
 					isValid = true;
 				}
 			}
-			else if (getNextWord().equals("/"))
+			else if (word.equals("/"))
 			{
-				if (APUFACTOR())
+				if (APUFACTOR(false))
 				{
+					pw.println("<Identifier> ::=<Letter>");
 					isValid = true;
 				}
 			}
 			else 
 			{
-				error("*");
+				error("* or / ");
 			}
 		}
-		else if (APUFACTOR()) 
-		{
-			isValid = true;
-		}
+
+		return isValid;
+	}
+	private boolean APUFACTOR(boolean option) throws IOException
+	{
 		
-		return isValid;
-	}
-	private boolean APUFACTOR() throws IOException
-	{
 		boolean isValid = false;
-		if (APUIDENTIFIER()) 
+		if (APUIDENTIFIER(true)) 
 		{
-			if (APUINT()) 
-			{
-				if (APUFLO()) 
-				{
-					isValid = true;
-				}
-			}
+			pw.println("<Factor> ::= <identifier> | <Integer> | <Float>");
+			isValid= true;
 		}
+		else if (APUINT(true)) 
+		{
+			pw.println("<Factor> ::= <identifier> | <Integer> | <Float>");
+			isValid= true;
+		}
+		else if (APUFLO(true)) 
+		{
+			pw.println("<Factor> ::= <identifier> | <Integer> | <Float>");
+			isValid = true;
+		}
+		else if(!option)
+		{
+		 error("Factor");
+		}
+
 		return isValid;
 	}
-	private boolean APUIDENTIFIER() throws IOException
+	private boolean APUIDENTIFIER(boolean option) throws IOException
 	{
+		pw.println("<Identifier> ::=<Letter>");
 		boolean isValid = false;
-		if (APULETTER()) 
+		if (APULETTER(option)) 
 		{
+			
 			isValid = true;
 		}
 		return isValid;
 	}
-	private boolean APULETTER() throws IOException
-	{
+	private boolean APULETTER(boolean option) throws IOException
+	{  
+		String word = getNextWord();
 		boolean isValid = false;
-		if (getNextWord().matches("[a-zA-Z]+"))
+		if (word.matches("[a-zA-Z]+"))
 		{
+			pw.println("<Letter> ::= a|...|Z");
 			isValid = true;
+		}
+		else if (!option)
+		{
+			
+		}
+		else 
+		{
+			
+			lastWord = word + " " + lastWord;
 		}
 		return isValid;
 	}
-	private boolean APUINT() throws IOException 
+	private boolean APUINT(boolean option) throws IOException 
 	{
+		String word = getNextWord();
 		boolean isValid = false;
-		if (getNextWord().matches("[0-9]+"))
+		if (word.matches("[0-9]+"))
 		{
+			pw.println("<Integer> ::= 0|...|9");
 			isValid = true;
+		}
+		else if (!option)
+		{
+			error("integer value");
+		}
+		else 
+		{
+			lastWord = word + " " + lastWord;
 		}
 		return isValid;
 	}
-	private boolean APUFLO() throws IOException
+	private boolean APUFLO(boolean option) throws IOException
 	{
+		String word = getNextWord();
 		boolean isValid = false;
-		if (getNextWord().matches("[-+]?[0-9]*\\.?[0-9]+"))
+		if (word.matches("[-+]?[0-9]*\\.?[0-9]+"))
 		{
+			pw.println("<Float> ::= .|0|...|9");
 			isValid = true;
+		}
+		else if (!option)
+		{
+			error("Float value");
+		}
+		else 
+		{
+			lastWord = word + " " + lastWord;
 		}
 		return isValid;
 	}
@@ -520,16 +586,14 @@ public class apuParse{
 			}
 
 			String word1 = br.readLine();
-			if (word1.length() == 0)
-				return "";
-			scan.close();
+			if (word1 == null)
+				word1 = "";
 			scan = new Scanner(word1);
 		}
 		return genareateNextWord(scan.next());
 
 
 	}
-
 	private String genareateNextWord(String word1) 
 	{
 		char[] carray = word1.toCharArray();
@@ -539,11 +603,6 @@ public class apuParse{
 		{
 			switch (carray[i]) 							
 			{
-			case '+': 	 						
-			case '-': 
-			case '/':
-			case '*':
-				break;
 			case '!':
 			case '>':
 			case '<':
@@ -560,7 +619,7 @@ public class apuParse{
 					else if(carray[0] != '=' && carray[0] != '!') {
 						lastWord = "";
 						for (int j = i; j < carray.length; j++)
-						
+
 							lastWord += carray[j];
 						return "1CompOperator";
 					}
@@ -579,11 +638,16 @@ public class apuParse{
 			case '}':
 			case ';':
 			case ',':
+			case '+': 	 						
+			case '-': 
+			case '/':
+			case '*':
 				if (i == 0) {
 					word += carray[0];
 					i = 1;
-					lastWord = "";
+					;
 				}
+				lastWord = "";
 				for (int j = i; j < carray.length; j++)
 					lastWord += carray[j];
 				return word;

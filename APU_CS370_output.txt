@@ -1,6 +1,20 @@
 Group Name(3) – Members(Micah Edington, Ryan Alcantra, Brandon Miller)
 
 <APU_CS370> ::= void main() { <statement> }
-< Empty >
-< Empty > ::= Epsilon
-Syntax is correct No errors Found
+<Statement> ::= <If statement>
+<if Statement > ::= If( < Condition > ) { < Statement > }
+<Condition> ::= <Identifier> <CompOperator> <Identifier>
+<Identifier> ::=<Letter>
+<Letter> ::= a|...|Z
+<CompOperator> ::= == | > | < | >= | <= | != 
+<CompOperator> ::= >
+<Identifier> ::=<Letter>
+<Letter> ::= a|...|Z
+***************************************************
+An error Is found: description Below
+Missing '{'
+*****************************************************
+
+
+
+Syntax is Incorrect. Check error above. Total error(s) found 1
