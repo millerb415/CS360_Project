@@ -6,8 +6,6 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class apuParse{
-	//	private String readin;
-	//	private String readout;
 	private BufferedReader br;
 	private FileReader fr;
 	private PrintWriter pw;
@@ -175,7 +173,6 @@ public class apuParse{
 								}
 								else
 								{
-									ifOnly= true;
 									lastWord = word + "" + lastWord;
 									isValid = true;
 								}
